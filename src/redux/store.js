@@ -1,61 +1,48 @@
-// import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
-// import logger from 'redux-logger';
-// import contactsReducer from './phonebook/phonebook-reducer';
-// import {
-//   persistStore,
-//   persistReducer,
-//   FLUSH,
-//   REHYDRATE,
-//   PAUSE,
-//   PERSIST,
-//   PURGE,
-//   REGISTER,
-// } from 'redux-persist';
-// import storage from 'redux-persist/lib/storage'; // defaults to localStorage for web
+import { configureStore, getDefaultMiddleware } from '@reduxjs/toolkit';
+import {
+  persistStore,
+  persistReducer,
+  FLUSH,
+  REHYDRATE,
+  PAUSE,
+  PERSIST,
+  PURGE,
+  REGISTER,
+} from 'redux-persist';
+import storage from 'redux-persist/lib/storage';
+// import { todosReducer } from './todos';
+import authReducer from './auth/auth-slice';
 
-// const persistConfig = {
-//   key: 'contact',
-//   storage,
-//   blacklist: ['filter'],
-// };
+const middleware = [
+  ...getDefaultMiddleware({
+    serializableCheck: {
+      ignoredActions: [
+        FLUSH,
+        REHYDRATE,
+        PAUSE,
+        PERSIST,
+        PURGE,
+        REGISTER,
+        'auth/login/rejected',
+        'auth/register/rejected',
+      ],
+    },
+  }),
+];
 
-// console.log(getDefaultMiddleware());
-
-// const middleware = [
-//   ...getDefaultMiddleware({
-//     serializableCheck: {
-//       ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-//     },
-//   }),
-//   logger,
-// ];
-
-// const store = configureStore({
-//   reducer: {
-//     contacts: persistReducer(persistConfig, contactsReducer),
-//   },
-//   middleware: middleware,
-//   devTools: process.env.NODE_ENV === 'development',
-// });
-
-// const persistor = persistStore(store);
-
-// export { store, persistor };
-
-import { configureStore } from '@reduxjs/toolkit';
-import { setupListeners } from '@reduxjs/toolkit/query';
-import { phonebookReducer } from './phonebook/phonebook-reducer';
-import { contactsApi } from './phonebook/phonebookSlice';
+const authPersistConfig = {
+  key: 'auth',
+  storage,
+  whitelist: ['token'],
+};
 
 export const store = configureStore({
   reducer: {
-    [contactsApi.reducerPath]: contactsApi.reducer,
-    phonebookReducer,
+    auth: persistReducer(authPersistConfig, authReducer),
+    // todos: todosReducer,
   },
-  middleware: getDefaultMiddleware => [
-    ...getDefaultMiddleware(),
-    contactsApi.middleware,
-  ],
+  middleware,
+  devTools: process.env.NODE_ENV === 'development',
 });
 
-setupListeners(store.dispatch);
+export const persistor = persistStore(store);
