@@ -1,19 +1,18 @@
 
 import { useState, useEffect } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { v4 as uuidv4 } from "uuid";
-import { useCreateContactsMutation, useFetchContactsQuery } from '../../redux/phonebook/phonebookSlice';
+import { addContact } from '../../redux/phonebook/phonebook-operations';
 import { ContactForm, Label, Input, Button } from "./ContactForm.styled";
-
-// import * as phonebookActions  from '../../redux/phonebook/phonebook-actions';
-// import {connect } from 'react-redux';
+import { getContacts } from '../../redux/phonebook/phonebook-selectors';
 
 
 export const Form = () => {
-  const { data: contacts = []} = useFetchContactsQuery();
-  const [createContact] = useCreateContactsMutation();
-
   const [name, setName] = useState('');
   const [number, setNumber] =  useState('');
+  const contacts = useSelector(getContacts);
+  const contact = { name, number };
+  const dispatch = useDispatch();
 
   useEffect(() => {
     setName('');
@@ -48,7 +47,7 @@ export const Form = () => {
     if (isRepeatableContact) {
       alert(`${name} is alredy in contacts`);
     } else {
-      createContact({name, number});
+      dispatch(addContact(contact));
     console.log(name, number);
     reset();
     }
@@ -93,58 +92,3 @@ export const Form = () => {
     );
   
 }
-
-// const mapStateToProps = state => {
-//   const items = state.contacts;
-//   console.log(items);
-//  return items;
-
-// };
-
-// const mapDispatchToProps = dispatch => ({
-//   onSubmit: (name, number) => dispatch(phonebookActions.addContacts(name, number)),
-// });
-
-// export default connect(mapStateToProps, mapDispatchToProps)(Form);
-
-
-
-
-
-// import {useState} from 'react';
-// import { useGetPokemonByNameQuery } from '../../redux/pokemon';
-// import { Spinner } from '../Spinner/Spinner';
-
-// export const Form =() => {
-//   const [pokemonName, setPokemonName] = useState('');
-//   const { data, error, isFetching, isError } = useGetPokemonByNameQuery(pokemonName,  {
-//     skip: pokemonName === '',
-//   });
-
-//   const handleSubmit = e => {
-//     e.preventDefault();
-//     setPokemonName(e.currentTarget.elements.pokemonName.value);
-//     e.currentTarget.reset();
-//   };
-
-//   console.log('isFetching', isFetching);
-//   console.log('data', data);
-//   console.log('error', error);
-
-//   const showPokemonData = data && !isFetching && !isError;
-
-//   return (
-//     <>
-//     <form autoComplete="off" onSubmit={handleSubmit}>
-//       <input type="text" name="pokemonName"/>
-//       <button type="submit">Search</button>
-//     </form>
-//     {isFetching && <Spinner />}
-
-//     {isError && <p>{error.data}</p>}
-//     {showPokemonData && <p>{data.name}</p>}
-//     </>
-//   );
-
-
-// };

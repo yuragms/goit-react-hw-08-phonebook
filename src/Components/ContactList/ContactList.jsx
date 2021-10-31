@@ -1,17 +1,24 @@
 import React from "react";
-import { useSelector } from 'react-redux';
-import { getFilter } from "../../redux/phonebook/phonebook-selectors.js";
+import { useSelector, useDispatch } from 'react-redux';
+import { deleteContact } from '../../redux/phonebook/phonebook-operations';
+import { getVisibleContacts } from "../../redux/phonebook/phonebook-selectors";
+
 import {List, Item, Button,  } from "./Contactlist.styled.jsx";
 
 
 
-const ContactList = ({ contacts, onDeleteContact }) => {
 
-  const filter = useSelector(getFilter);
+
+const ContactList = () => {
+
+  const filteredContacts = useSelector(getVisibleContacts);
+  const dispatch = useDispatch();
+
+  // const filter = useSelector(getFilter);
   
-  const filteredContacts = contacts.filter(({ name }) =>
-    name.toLowerCase().includes(filter.toLowerCase()),
-  );
+  // const filteredContacts = contacts.filter(({ name }) =>
+  //   name.toLowerCase().includes(filter.toLowerCase()),
+  // );
 
   const filteredContactsSort = filteredContacts.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -22,7 +29,7 @@ const ContactList = ({ contacts, onDeleteContact }) => {
     {filteredContactsSort.map(({ id, name, number }) => (
       <Item key={id}>
         <span>{name}:</span> <span>{number}</span>
-        <Button type="button" onClick={() => onDeleteContact(id)}>
+        <Button type="button" onClick={() => dispatch(deleteContact(id))}>
           Delete
         </Button>
       </Item>
