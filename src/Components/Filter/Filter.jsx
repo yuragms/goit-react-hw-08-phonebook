@@ -1,5 +1,5 @@
 // import React from "react";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 import { useEffect, useState } from 'react';
 import { Label, Input } from "./Filter.styled.jsx";
 import { filterContact } from '../../redux/phonebook/phonebook-actions';
@@ -15,12 +15,7 @@ const Filter = () => {
   };
   useEffect(() => {
     dispatch(filterContact(filterValue));
-    console.log('fff');
   }, [dispatch, filterValue]);
-
-
-
-
 
 
   return (
@@ -28,7 +23,6 @@ const Filter = () => {
     Find contacts by name
     <Input 
       type="text"
-      // value={filterValue}
       onChange={handleInputValue} />
   </Label>
   );

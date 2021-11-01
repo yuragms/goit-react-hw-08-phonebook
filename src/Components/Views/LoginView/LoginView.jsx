@@ -26,14 +26,9 @@ export default function LoginView() {
         setPassword('');
       };
 
-
-
-
-
     return (
-<div>
-      <h1>Страница логина</h1>
-
+   <div>
+    <h1>Страница логина</h1>
       <LoginForm onSubmit={handleSubmit} autoComplete="off">
         <Loginlabel >
           Почта

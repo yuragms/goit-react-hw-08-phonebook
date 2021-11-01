@@ -44,12 +44,12 @@ export const Form = () => {
     const isRepeatableContact = contacts.find(
       (contact) => contact.name.toLowerCase() === name.toLowerCase()
     );
+
     if (isRepeatableContact) {
       alert(`${name} is alredy in contacts`);
     } else {
       dispatch(addContact(contact));
-    console.log(name, number);
-    reset();
+      reset();
     }
 
   };

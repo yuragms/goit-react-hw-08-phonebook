@@ -8,8 +8,9 @@ const NavLinkByStyled = styled(NavLink)`
   font-weight: 700;
   color: #2A363B;
   &.active {
-    color: #E84A5F;
+    color: tomato;
   }
 `;
+// #E84A5F;
 
 export {NavLinkByStyled };
